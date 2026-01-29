@@ -21,23 +21,23 @@ export default function WallPage() {
     loadPromises();
   }, []);
 
-  const loadPromises = async () => {
-    try {
-      const publicPromises = await getPublicPromises();
-      
-      // Assign random positions and rotations
-      const floatingPromises = publicPromises.map((promise) => ({
-        ...promise,
-        x: Math.random() * (window.innerWidth - 200),
-        y: Math.random() * (window.innerHeight - 200) + 100,
-        rotation: Math.random() * 20 - 10,
-      }));
+const loadPromises = async () => {
+  try {
+    const publicPromises = await getPublicPromises();
+    
+    // Assign random positions and rotations
+    const floatingPromises = publicPromises.map((promise: PromiseType) => ({
+      ...promise,
+      x: Math.random() * (window.innerWidth - 200),
+      y: Math.random() * (window.innerHeight - 200) + 100,
+      rotation: Math.random() * 20 - 10,
+    }));
 
-      setPromises(floatingPromises);
-    } catch (error) {
-      console.error('Error loading promises:', error);
-    }
-  };
+    setPromises(floatingPromises);
+  } catch (error) {
+    console.error('Error loading promises:', error);
+  }
+};
 
   const handleDrag = (id: string, x: number, y: number) => {
     setPromises((prev) =>
