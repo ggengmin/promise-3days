@@ -5,14 +5,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getPromiseById, addFCMToken } from '@/lib/firestore';
 import { requestNotificationPermission } from '@/lib/firebase';
-import type { Promise } from '@/lib/firestore';
+import type { PromiseData } from '@/lib/firestore';
 
 export default function FriendPage() {
   const params = useParams();
   const router = useRouter();
   const promiseId = params.id as string;
   
-  const [promise, setPromise] = useState<Promise | null>(null);
+  const [promise, setPromise] = useState<PromiseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [subscribing, setSubscribing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
