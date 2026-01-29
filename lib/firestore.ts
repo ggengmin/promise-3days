@@ -13,7 +13,6 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 
-// 인터페이스 이름 변경: Promise -> PromiseData
 export interface PromiseData {
   id?: string;
   content: string;
@@ -21,11 +20,10 @@ export interface PromiseData {
   isPublic: boolean;
   createdAt: Timestamp;
   notificationDate: Timestamp;
-  fcmTokens: string[]; // Array of FCM tokens for friends
+  fcmTokens: string[];
   status: 'pending' | 'notified' | 'completed';
 }
 
-// Create a new promise
 export const createPromise = async (
   content: string,
   creatorName: string,
@@ -48,8 +46,7 @@ export const createPromise = async (
   return docRef.id;
 };
 
-// Get a promise by ID
-export const getPromiseById = async (id: string): Promise<PromiseData | null> => {
+export const getPromiseById = async (id: string) => {
   const docRef = doc(db, 'promises', id);
   const docSnap = await getDoc(docRef);
 
@@ -59,7 +56,6 @@ export const getPromiseById = async (id: string): Promise<PromiseData | null> =>
   return null;
 };
 
-// Add FCM token to a promise (when friend subscribes)
 export const addFCMToken = async (promiseId: string, token: string) => {
   const docRef = doc(db, 'promises', promiseId);
   const docSnap = await getDoc(docRef);
@@ -74,8 +70,7 @@ export const addFCMToken = async (promiseId: string, token: string) => {
   }
 };
 
-// Get all public promises (for the wall)
-export const getPublicPromises = async (): Promise<PromiseData[]> => {
+export const getPublicPromises = async () => {
   const q = query(
     collection(db, 'promises'),
     where('isPublic', '==', true),
@@ -85,29 +80,27 @@ export const getPublicPromises = async (): Promise<PromiseData[]> => {
   const querySnapshot = await getDocs(q);
   const promises: PromiseData[] = [];
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
+  querySnapshot.forEach((document) => {
+    const data = document.data();
     const createdAt = data.createdAt as Timestamp;
     const now = new Date();
     const createdDate = createdAt.toDate();
     const hoursDiff = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60);
 
-    // Only show promises less than 24 hours old
     if (hoursDiff < 24) {
-      promises.push({ id: doc.id, ...data } as PromiseData);
+      promises.push({ id: document.id, ...data } as PromiseData);
     }
   });
 
   return promises;
 };
 
-// Delete old public promises (24+ hours old)
 export const deleteOldPromises = async () => {
   const q = query(collection(db, 'promises'), where('isPublic', '==', true));
   const querySnapshot = await getDocs(q);
 
   const now = new Date();
-  const deletionPromises: Promise<void>[] = [];
+  const deletionPromises: any[] = [];
 
   querySnapshot.forEach((document) => {
     const data = document.data();
