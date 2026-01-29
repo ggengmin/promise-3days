@@ -13,7 +13,8 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 
-export interface Promise {
+// 인터페이스 이름 변경: Promise -> PromiseData
+export interface PromiseData {
   id?: string;
   content: string;
   creatorName: string;
@@ -40,7 +41,7 @@ export const createPromise = async (
     createdAt: serverTimestamp(),
     notificationDate: Timestamp.fromDate(notificationDate),
     fcmTokens: [],
-    status: 'pending',
+    status: 'pending' as const,
   };
 
   const docRef = await addDoc(collection(db, 'promises'), promiseData);
@@ -48,12 +49,12 @@ export const createPromise = async (
 };
 
 // Get a promise by ID
-export const getPromiseById = async (id: string): Promise<Promise | null> => {
+export const getPromiseById = async (id: string): Promise<PromiseData | null> => {
   const docRef = doc(db, 'promises', id);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() } as Promise;
+    return { id: docSnap.id, ...docSnap.data() } as PromiseData;
   }
   return null;
 };
@@ -74,7 +75,7 @@ export const addFCMToken = async (promiseId: string, token: string) => {
 };
 
 // Get all public promises (for the wall)
-export const getPublicPromises = async (): Promise<Promise[]> => {
+export const getPublicPromises = async (): Promise<PromiseData[]> => {
   const q = query(
     collection(db, 'promises'),
     where('isPublic', '==', true),
@@ -82,7 +83,7 @@ export const getPublicPromises = async (): Promise<Promise[]> => {
   );
 
   const querySnapshot = await getDocs(q);
-  const promises: Promise[] = [];
+  const promises: PromiseData[] = [];
 
   querySnapshot.forEach((doc) => {
     const data = doc.data();
@@ -93,7 +94,7 @@ export const getPublicPromises = async (): Promise<Promise[]> => {
 
     // Only show promises less than 24 hours old
     if (hoursDiff < 24) {
-      promises.push({ id: doc.id, ...data } as Promise);
+      promises.push({ id: doc.id, ...data } as PromiseData);
     }
   });
 
@@ -106,7 +107,7 @@ export const deleteOldPromises = async () => {
   const querySnapshot = await getDocs(q);
 
   const now = new Date();
-  const deletionPromises: any[] = [];
+  const deletionPromises: Promise<void>[] = [];
 
   querySnapshot.forEach((document) => {
     const data = document.data();
