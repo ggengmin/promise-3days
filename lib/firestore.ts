@@ -30,7 +30,7 @@ export const createPromise = async (
   content: string,
   creatorName: string,
   isPublic: boolean
-): Promise<string> => {
+) => {
   const notificationDate = new Date();
   notificationDate.setDate(notificationDate.getDate() + 3);
 
