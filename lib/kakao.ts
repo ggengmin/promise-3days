@@ -29,9 +29,7 @@ export const shareToKakao = (promiseId: string, content: string, creatorName: st
     content: {
       title: '너, 약속 지켰어? 🤨',
       description: `${creatorName}가 3일 약속을 공유했어!\n"${content}"\n\n3일 후 지켰는지 확인해줘!`,
-      imageUrl: 'https://via.placeholder.com/1x1/FFFFFF/FFFFFF',
-      imageWidth: 1,
-      imageHeight: 1,
+      imageUrl: 'https://via.placeholder.com/800x400/8B1E1E/FFFFFF?text=3%EC%9D%BC+%EC%95%BD%EC%86%8D',
       link: {
         mobileWebUrl: shareUrl,
         webUrl: shareUrl,
