@@ -17,34 +17,25 @@ export const shareToKakao = (promiseId: string, content: string, creatorName: st
     return;
   }
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/friend/${promiseId}`;
+  const shareUrl = `https://promise-3days.vercel.app/friend/${promiseId}`;
 
-  console.log('✅ 카카오톡 공유 시작');
-  console.log('Promise ID:', promiseId);
-  console.log('Content:', content);
-  console.log('Share URL:', shareUrl);
+  console.log('=== 카카오톡 공유 ===');
+  console.log('URL:', shareUrl);
 
-  window.Kakao.Share.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: '너, 약속 지켰어? 🤨',
-      description: `${creatorName}가 3일 약속을 공유했어!\n"${content}"\n\n3일 후 지켰는지 확인해줘!`,
-      imageUrl: 'https://via.placeholder.com/800x400/8B1E1E/FFFFFF?text=3%EC%9D%BC+%EC%95%BD%EC%86%8D',
+  try {
+    window.Kakao.Share.sendDefault({
+      objectType: 'text',
+      text: `${creatorName}가 3일 약속을 공유했어!\n\n"${content}"\n\n3일 후 지켰는지 확인해줘!`,
       link: {
         mobileWebUrl: shareUrl,
         webUrl: shareUrl,
       },
-    },
-    buttons: [
-      {
-        title: '👇 여기 눌러서 알림 받기',
-        link: {
-          mobileWebUrl: shareUrl,
-          webUrl: shareUrl,
-        },
-      },
-    ],
-  });
-
-  console.log('✅ 카카오톡 공유 요청 완료');
+      buttonTitle: '👇 여기 눌러서 알림 받기',
+    });
+    
+    console.log('✅ 공유 완료');
+  } catch (error) {
+    console.error('❌ 공유 실패:', error);
+    alert('카카오톡 공유에 실패했습니다.');
+  }
 };

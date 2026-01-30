@@ -26,7 +26,6 @@ export default function SharePage() {
     setCreatorName(savedName);
     initKakao();
 
-    // 페이지 로드 시 Promise 생성
     const initializePromise = async () => {
       const id = await createPromise(savedPromise, savedName, false);
       setPromiseId(id);
@@ -42,11 +41,7 @@ export default function SharePage() {
       return;
     }
 
-    // 🔍 디버깅: 생성된 링크 확인
-    const shareUrl = `https://promise-3days.vercel.app/friend/${promiseId}`;
-    alert(`공유할 링크:\n${shareUrl}\n\n이 링크가 맞는지 확인해주세요!`);
-
-    // 카카오톡 공유만 실행
+    // 카카오톡 공유 실행
     shareToKakao(promiseId, promise, creatorName);
   };
 
@@ -84,7 +79,6 @@ export default function SharePage() {
 
         <p className="font-serif text-center text-gray-600 mb-8">
           친구에게 약속을 공유해보세요!
-          <br />
         </p>
 
         <div className="space-y-4">
