@@ -42,15 +42,15 @@ export default function SharePage() {
       return;
     }
 
-    // 🔍 디버깅: 생성된 링크 확인
-    const shareUrl = `https://promise-3days.vercel.app/friend/${promiseId}`;
-    alert(`공유할 링크:\n${shareUrl}\n\n이 링크가 맞는지 확인해주세요!`);
-
-    // 카카오톡 공유만 실행
+    // 카카오톡 공유만 실행 (페이지 이동 X)
     shareToKakao(promiseId, promise, creatorName);
+    
+    // 공유 후 바로 confirm으로 이동하지 말고
+    // 사용자가 공유를 완료하면 수동으로 이동하도록 변경
   };
 
   const handleNext = () => {
+    // 공유 완료 후 또는 스킵 시 다음 페이지로
     router.push('/confirm');
   };
 
@@ -75,13 +75,6 @@ export default function SharePage() {
           </p>
         </div>
 
-        {/* 🔍 디버깅: Promise ID 표시 */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4 text-xs">
-          <p className="font-mono">Debug Info:</p>
-          <p className="font-mono">Promise ID: {promiseId || '로딩중...'}</p>
-          <p className="font-mono">Link: https://promise-3days.vercel.app/friend/{promiseId}</p>
-        </div>
-
         <p className="font-serif text-center text-gray-600 mb-8">
           친구에게 약속을 공유해보세요!
           <br />
@@ -96,7 +89,6 @@ export default function SharePage() {
             <span className="text-2xl">💬</span>
             카카오톡으로 공유하기
           </button>
-
           <button
             onClick={handleSkip}
             className="w-full py-4 bg-gray-100 text-gray-600 font-serif rounded-full hover:bg-gray-200 transition-all"
