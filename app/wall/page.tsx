@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getPublicPromises } from '@/lib/firestore';
-import type { Promise as PromiseType } from '@/lib/firestore';
+import type { PromiseData } from '@/lib/firestore';
 
-interface FloatingPromise extends PromiseType {
+interface FloatingPromise extends PromiseData {
   x: number;
   y: number;
   rotation: number;
@@ -26,7 +26,7 @@ const loadPromises = async () => {
     const publicPromises = await getPublicPromises();
     
     // Assign random positions and rotations
-    const floatingPromises = publicPromises.map((promise: PromiseType) => ({
+    const floatingPromises = publicPromises.map((promise: PromiseData) => ({
       ...promise,
       x: Math.random() * (window.innerWidth - 200),
       y: Math.random() * (window.innerHeight - 200) + 100,
